@@ -1,15 +1,17 @@
+require('dotenv').config();
+
 const express = require('express');
 const sql = require('mssql');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000; // ใช้พอร์ตที่กำหนดโดยแพลตฟอร์มหรือ 3000 ถ้าไม่ได้กำหนด
 
 // การตั้งค่าการเชื่อมต่อกับ SQL Server
 const config = {
-  user: 'ai',
-  password: 'Toa@2024',
-  server: '52.76.126.117', // ที่อยู่ของ SQL Server
-  database: 'intranet_db',
+  user: process.env.DB_USER, // ใช้ตัวแปรแวดล้อมสำหรับ username
+  password: process.env.DB_PASSWORD, // ใช้ตัวแปรแวดล้อมสำหรับ password
+  server: process.env.DB_SERVER, // ที่อยู่ของ SQL Server จากตัวแปรแวดล้อม หรือค่าตั้งต้น
+  database: process.env.DB_NAME,
   options: {
     encrypt: true, // ใช้การเข้ารหัสถ้าจำเป็น
     trustServerCertificate: true, // ใช้ถ้าไม่มีใบรับรอง SSL ที่เชื่อถือได้
@@ -37,6 +39,12 @@ app.get('/applications', async (req, res) => {
 // เพิ่ม endpoint สำหรับ root URL
 app.get('/', (req, res) => {
   res.send('Hello! This is the root of your API.');
+});
+
+// เพิ่มการจัดการข้อผิดพลาด
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
 });
 
 // เริ่มต้นเซิร์ฟเวอร์
