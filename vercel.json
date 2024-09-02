@@ -1,24 +1,12 @@
 {
     "version": 2,
     "builds": [
-      {
-        "src": "application.js",
-        "use": "@vercel/node"
-      },
-      {
-        "src": "calendar.js",
-        "use": "@vercel/node"
-      }
+      { "src": "application.js", "use": "@vercel/node" },
+      { "src": "calendar.js", "use": "@vercel/node" }
     ],
     "routes": [
-      {
-        "src": "^/application(.*)",   
-        "dest": "application.js"
-      },
-      {
-        "src": "^/calendar(.*)",      
-        "dest": "calendar.js"
-      }
+      { "src": "/applications", "dest": "application.js" },
+      { "src": "/calendar", "dest": "calendar.js" }
     ]
   }
   
